@@ -8,6 +8,8 @@
             'version': '0.0.1',
 
             'init': function (params) {
+                var i;
+                
                 for (i in params) {
                     // Do not overwrite core couchCover methods/values!
                     if (!couchCover.hasOwnProperty(i)) {
@@ -122,7 +124,7 @@
     console.log('CouchCover ' + couchCover.version + ' initialized');
 }(window));
 
-couchCover.init({host:'/couchdb/'});
+couchCover.init({host: '/couchdb/'});
 
 var ccDoc = cc$.doc.revision({db: 'host', id: 'b9df6033fcf31eb37af43cbd4b000550'}, function (response) {
     console.log(JSON.parse(response));
