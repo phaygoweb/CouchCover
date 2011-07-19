@@ -75,11 +75,8 @@
                 } else {
                     xhr.send(null);
                 }
-            },
-            
-            'parse': function (params) {
-            
             }
+            
         };
             
     couchCover.database = {
@@ -110,9 +107,9 @@
         
     couchCover.doc = {
         'create': function (params, data, callback) {
-            // Return false if no docId is given
+            // If no docId is provided, generate a UUID
             if (!params.docId) {
-                console.error('doc.create: No document Id provided.');
+                console.error('No docId provided, need to generate a UUID.');
             }
         
             var docURL = params.db + '/' + params.docId;
@@ -142,7 +139,26 @@
         },
         
         'update': function (params, data, callback) {
-            
+            var docURL = params.db + '/' + params.docId,
+                tempData = JSON.parse(data);
+
+            // If _rev isn't included in data
+            if (!tempData._rev) {
+                // Get latest revision and update using that document
+                couchCover.doc.revision(params, function (response) {
+                    tempData._rev = response;
+                    data = JSON.stringify(tempData);
+                    
+                    couchCover.xhr({url: docURL, method: 'PUT'}, data, function (response) {
+                        if (callback) { callback(response.responseText); }
+                    });
+                    
+                });
+            } else {
+                couchCover.xhr({url: docURL, method: 'PUT'}, data, function (response) {
+                    if (callback) { callback(response.responseText); }
+                });
+            }
         },
         
         'view': function (params, callback) {
@@ -161,6 +177,14 @@
                 if (callback) { callback(response.getResponseHeader('Etag').replace(/"/gi, '')); }
             });
         }
+    };
+    
+    couchCover.login = function () {
+    
+    };
+    
+    couchCover.logout = function () {
+    
     };
     
     window.couchCover = window.cc$ = couchCover;
