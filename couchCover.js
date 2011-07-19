@@ -19,7 +19,7 @@
             },
             
             'xhr': function (params, data, callback) {
-                // Set XHR Object
+                // Set XHR object
                 var xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
                 
                 // No XHR support
@@ -53,7 +53,7 @@
                             //console.log(xhr.getResponseHeader('Etag'));
                             
                         }
-                    } else { // The World Has Ended
+                    } else { // The world has ended!
                         return false;
                     }
                 };
@@ -61,10 +61,11 @@
                 xhr.open(params.method, params.url, true);
                 
                 // PUT and POST Headers
-                if (params.method === 'PUT') {
+                if (params.method === 'PUT' || params.method === 'POST') {
                     xhr.setRequestHeader('Content-Type', 'application/json');
                 }
                 
+                // Send with data, if available, otherwise null
                 if (data == null) {
                     xhr.send(data);
                 } else {
@@ -96,16 +97,20 @@
             });
         },
         
-        'info': function (params, callback) {
-            couchCover.xhr({url: params.url}, null, function (response) {
+        'view': function (params, callback) {
+            couchCover.xhr({url: params.db}, null, function (response) {
                 if (callback) { callback(response.responseText); }
             });
         }
     };
         
     couchCover.doc = {
-        'create': function (params, callback) {
+        'create': function (params, data, callback) {
+            var docURL = params.db + '/' + params.docId;
             
+            couchCover.xhr({url: docURL}, data, function (response) {
+                if (callback) { callback(response.responseText); }
+            });
         },
         
         'delete': function (params, callback) {
@@ -117,7 +122,7 @@
         },
         
         'get': function (params, callback) {
-            var docURL = params.db + '/' + params.id;
+            var docURL = params.db + '/' + params.docId;
             
             couchCover.xhr({url: docURL}, null, function (response) {
                 if (callback) { callback(response.responseText); }
@@ -125,7 +130,7 @@
         },
         
         'revision': function (params, callback) {
-            var docURL = params.db + '/' + params.id;
+            var docURL = params.db + '/' + params.docId;
             
             couchCover.xhr({url: docURL, method: 'HEAD'}, null, function (response) {
                 if (callback) { callback(response.getResponseHeader('Etag')); }
@@ -136,4 +141,3 @@
     window.couchCover = window.cc$ = couchCover;
     console.log('CouchCover ' + couchCover.version + ' initialized');
 }(window));
-
