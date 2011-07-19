@@ -1,0 +1,16 @@
+[X].database
+    [X].create
+    [X].delete
+    [X].view
+    [X].viewAll
+    
+[X].doc
+    [X].create
+    [X].delete
+    [X].update
+    [X].view
+    [X].revision
+
+[ ].server
+    [ ].login
+    [ ].logoff
