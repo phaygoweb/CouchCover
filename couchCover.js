@@ -53,9 +53,6 @@
                                 return xhr;
                             }
                             
-                            //console.log(xhr.getAllResponseHeaders());
-                            //console.log(xhr.getResponseHeader('Etag'));
-                            
                         }
                     } else { // The world has ended!
                         return false;
@@ -109,7 +106,7 @@
         'create': function (params, data, callback) {
             // If no docId is provided, generate a UUID
             if (!params.docId) {
-                console.error('No docId provided, need to generate a UUID.');
+                //console.error('No docId provided, need to generate a UUID.');
             }
         
             var docURL = params.db + '/' + params.docId;
@@ -188,5 +185,4 @@
     };
     
     window.couchCover = window.cc$ = couchCover;
-    console.log('CouchCover ' + couchCover.version + ' initialized');
 }(window));

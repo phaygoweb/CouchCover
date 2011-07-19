@@ -12,9 +12,8 @@ Functions and Methods Status List
 [X].doc
     [X].create (PUT)
     [X].delete (DELETE)
-    [X].update (PUT)  <-- Replacing with .addTo and .removeFrom
-    [ ].addTo (PUT)
-    [ ].removeFrom (PUT)
+    [X].addField (PUT)
+    [X].removeField (PUT)
     [X].view (GET)
     [X].revision (HEAD)
 
