@@ -36,15 +36,7 @@
                 if (!params.method) { params.method = 'GET'; }
                 
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 0) { // Uninitialized
-                    
-                    } else if (xhr.readyState === 1) { // Open
-                        
-                    } else if (xhr.readyState === 2) { // Sent
-                        
-                    } else if (xhr.readyState === 3) { // Receiving
-                        
-                    } else if (xhr.readyState === 4) { // Loaded
+                    if (xhr.readyState === 4) { // Loaded
                         if (xhr.status === 200) {
                         
                             if (callback) {
@@ -106,7 +98,7 @@
         'create': function (params, data, callback) {
             // If no docId is provided, generate a UUID
             if (!params.docId) {
-                //console.error('No docId provided, need to generate a UUID.');
+                console.error('No docId provided, need to generate a UUID.');
             }
         
             var docURL = params.db + '/' + params.docId;
@@ -135,7 +127,7 @@
             
         },
         
-        'update': function (params, data, callback) {
+        'addField': function (params, data, callback) {
             var docURL = params.db + '/' + params.docId,
                 tempData = JSON.parse(data);
 
@@ -158,6 +150,28 @@
             }
         },
         
+        'removeField': function (params, callback) {
+            var docURL = params.db + '/' + params.docId;
+            
+            couchCover.xhr({url: docURL}, null, function (response) {
+                var docData = JSON.parse(response.responseText),
+                    removeFields = params.remove.split(','),
+                    len = removeFields.length,
+                    i = 0;
+                
+                for (i = 0; i < len; i++) {
+                    // Remove any leading and trailing whitespace
+                    removeFields[i] = removeFields[i].replace(/^(\s)/i, '').replace(/(\s)$/i, '');
+                    
+                    delete docData[removeFields[i]];
+                }
+                
+                couchCover.xhr({url: docURL, method: 'PUT'}, JSON.stringify(docData), function (response) {
+                    if (callback) { callback(response.responseText); }
+                });
+            });
+        },
+        
         'view': function (params, callback) {
             var docURL = params.db + '/' + params.docId;
             
@@ -177,7 +191,7 @@
     };
     
     couchCover.login = function () {
-    
+        
     };
     
     couchCover.logout = function () {
@@ -185,4 +199,5 @@
     };
     
     window.couchCover = window.cc$ = couchCover;
+    console.log('CouchCover ' + couchCover.version + ' initialized');
 }(window));
