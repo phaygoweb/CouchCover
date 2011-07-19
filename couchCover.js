@@ -1,4 +1,8 @@
-﻿(function (global) {
+﻿/*
+ *  Developer: Kyle A. Matheny
+ */
+
+(function (global) {
     
     var dom = window.document,
         nav = window.navigator,
@@ -66,7 +70,7 @@
                 }
                 
                 // Send with data, if available, otherwise null
-                if (data == null) {
+                if (data !== '') {
                     xhr.send(data);
                 } else {
                     xhr.send(null);
@@ -106,22 +110,42 @@
         
     couchCover.doc = {
         'create': function (params, data, callback) {
+            // Return false if no docId is given
+            if (!params.docId) {
+                console.error('doc.create: No document Id provided.');
+            }
+        
             var docURL = params.db + '/' + params.docId;
             
-            couchCover.xhr({url: docURL}, data, function (response) {
+            couchCover.xhr({url: docURL, method: 'PUT'}, data, function (response) {
                 if (callback) { callback(response.responseText); }
             });
         },
         
         'delete': function (params, callback) {
+            var docURL = params.db + '/' + params.docId;
+            
+            // Is revision number provided?
+            if (params.docRev) {
+                docURL += '?rev=' + params.docRev;
+            } else {
+                // Get current document revision number
+                couchCover.doc.revision({db: params.db, docId: params.docId}, function (response) {
+                    docURL += '?rev=' + response;
+                    
+                    couchCover.xhr({url: docURL, method: 'DELETE'}, null, function (response) {
+                        if (callback) { callback(response.responseText); }
+                    });
+                });
+            }
             
         },
         
-        'update': function (params, callback) {
+        'update': function (params, data, callback) {
             
         },
         
-        'get': function (params, callback) {
+        'view': function (params, callback) {
             var docURL = params.db + '/' + params.docId;
             
             couchCover.xhr({url: docURL}, null, function (response) {
@@ -133,7 +157,8 @@
             var docURL = params.db + '/' + params.docId;
             
             couchCover.xhr({url: docURL, method: 'HEAD'}, null, function (response) {
-                if (callback) { callback(response.getResponseHeader('Etag')); }
+                // Drop the quotation marks and then call callback
+                if (callback) { callback(response.getResponseHeader('Etag').replace(/"/gi, '')); }
             });
         }
     };
