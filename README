@@ -1,16 +1,17 @@
 [X].database
-    [X].create
-    [X].delete
-    [X].view
-    [X].viewAll
+    [X].create (PUT)
+    [X].delete (DELETE)
+    [X].view (GET)
+    [X].viewAll (GET)
     
 [X].doc
-    [X].create
-    [X].delete
-    [X].update
-    [X].view
-    [X].revision
+    [X].create (PUT)
+    [X].delete (DELETE)
+    [X].update (PUT)
+    [X].view (GET)
+    [X].revision (HEAD)
 
 [ ].server
     [ ].login
     [ ].logoff
+    [ ].uuid
