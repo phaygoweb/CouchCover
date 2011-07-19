@@ -59,8 +59,17 @@
                 };
                 
                 xhr.open(params.method, params.url, true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(null);
+                
+                // PUT and POST Headers
+                if (params.method === 'PUT') {
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                }
+                
+                if (data == null) {
+                    xhr.send(data);
+                } else {
+                    xhr.send(null);
+                }
             },
             
             'parse': function (params) {
@@ -70,15 +79,19 @@
             
     couchCover.database = {
         'create': function (params, callback) {
-            
+            couchCover.xhr({url: params.db, method: 'PUT'}, null, function (response) {
+                if (callback) { callback(response.responseText); }
+            });
         },
         
         'delete': function (params, callback) {
-            
+            couchCover.xhr({url: params.db, method: 'DELETE'}, null, function (response) {
+                if (callback) { callback(response.responseText); }
+            });
         },
         
         'viewAll': function (params, callback) {
-            couchCover.xhr({url: '_all_dbs'}, null, function(response) {
+            couchCover.xhr({url: '_all_dbs'}, null, function (response) {
                 if (callback) { callback(response.responseText); }
             });
         },
@@ -124,8 +137,3 @@
     console.log('CouchCover ' + couchCover.version + ' initialized');
 }(window));
 
-couchCover.init({host: '/couchdb/'});
-
-var ccDoc = cc$.doc.revision({db: 'host', id: 'b9df6033fcf31eb37af43cbd4b000550'}, function (response) {
-    console.log(JSON.parse(response));
-});
