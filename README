@@ -1,3 +1,8 @@
+Functions and Methods Status List
+
+[X].init
+[X].xhr
+
 [X].database
     [X].create (PUT)
     [X].delete (DELETE)
@@ -7,7 +12,9 @@
 [X].doc
     [X].create (PUT)
     [X].delete (DELETE)
-    [X].update (PUT)
+    [X].update (PUT)  <-- Replacing with .addTo and .removeFrom
+    [ ].addTo (PUT)
+    [ ].removeFrom (PUT)
     [X].view (GET)
     [X].revision (HEAD)
 
