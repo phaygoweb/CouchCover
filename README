@@ -26,4 +26,4 @@ Functions and Methods
 [ ].server
     [ ].login
     [ ].logoff
-    [ ].uuid
+    [X].uuid

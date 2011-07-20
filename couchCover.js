@@ -93,6 +93,7 @@
             // If no docId is provided, generate a UUID
             if (!params.docId) {
                 console.error('No docId provided, need to generate a UUID.');
+                return false;
             }
         
             var docURL = params.db + '/' + params.docId;
@@ -182,6 +183,16 @@
                 if (callback) { callback(response.getResponseHeader('Etag').replace(/"/gi, '')); }
             });
         }
+    };
+    
+    couchCover.uuid = function (params, callback) {
+        var uuidUrl = '_uuids';
+        
+        if (typeof params.count != 'undefined') { uuidUrl += '?count=' + params.count; }
+        
+        couchCover.xhr({url: uuidUrl}, null, function (response) {
+            if (callback) { callback(response.responseText); }
+        });
     };
     
     window.couchCover = window.cc$ = couchCover;
