@@ -1,0 +1,20 @@
+﻿Change.log
+
+Functions and Methods
+
+[X].init
+[X].xhr
+
+[X].database
+    [X].create (PUT)
+    [X].delete (DELETE)
+    [X].view (GET)
+    [X].viewAll (GET)
+    
+[X].doc
+    [X].create (PUT)
+    [X].delete (DELETE)
+    [X].addField (PUT)
+    [X].removeField (PUT)
+    [X].view (GET)
+    [X].revision (HEAD)
