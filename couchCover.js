@@ -58,6 +58,22 @@
             } else {
                 xhr.send(null);
             }
+        },
+        
+        'viewAllDbs': function (params, callback) {
+            couchCover.xhr({url: '_all_dbs'}, null, function (response) {
+                if (callback) { callback(response.responseText); }
+            });
+        },
+        
+        'uuid': function (params, callback) {
+            var uuidUrl = '_uuids';
+            
+            if (typeof params.count != 'undefined') { uuidUrl += '?count=' + params.count; }
+            
+            couchCover.xhr({url: uuidUrl}, null, function (response) {
+                if (callback) { callback(response.responseText); }
+            });
         }
         
     };
@@ -75,12 +91,6 @@
             });
         },
         
-        'viewAll': function (params, callback) {
-            couchCover.xhr({url: '_all_dbs'}, null, function (response) {
-                if (callback) { callback(response.responseText); }
-            });
-        },
-        
         'view': function (params, callback) {
             couchCover.xhr({url: params.db}, null, function (response) {
                 if (callback) { callback(response.responseText); }
@@ -92,7 +102,7 @@
         'create': function (params, data, callback) {
             // If no docId is provided, generate a UUID
             if (!params.docId) {
-                console.error('No docId provided, need to generate a UUID.');
+                //console.error('No docId provided, need to generate a UUID.');
                 return false;
             }
         
@@ -185,16 +195,16 @@
         }
     };
     
-    couchCover.uuid = function (params, callback) {
-        var uuidUrl = '_uuids';
+    couchCover.service = {
+        'login': function (params, data, callback) {
         
-        if (typeof params.count != 'undefined') { uuidUrl += '?count=' + params.count; }
+        },
         
-        couchCover.xhr({url: uuidUrl}, null, function (response) {
-            if (callback) { callback(response.responseText); }
-        });
-    };
+        'logout': function (params, data, callback) {
+        
+        }
+    }
     
     window.couchCover = window.cc$ = couchCover;
-    console.log('CouchCover ' + couchCover.version + ' initialized');
+    //console.log('CouchCover ' + couchCover.version + ' initialized');
 }(window));
