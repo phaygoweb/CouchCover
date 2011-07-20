@@ -8,6 +8,7 @@ Functions and Methods
 
 [X].init
 [X].xhr
+[X].uuid (GET)
 
 [X].database
     [X].create (PUT)
@@ -26,4 +27,3 @@ Functions and Methods
 [ ].server
     [ ].login
     [ ].logoff
-    [X].uuid
