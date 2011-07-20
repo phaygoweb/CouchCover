@@ -3,70 +3,64 @@
  */
 
 (function (global) {
-    
-    var dom = window.document,
-        nav = window.navigator,
-        loc = window.location,
 
-        couchCover = {
-            'version': '0.0.1',
+    var couchCover = {
+        'version': '0.1.0',
 
-            'init': function (params) {
-                var i;
-                
-                for (i in params) {
-                    // Do not overwrite core couchCover methods/values!
-                    if (!couchCover.hasOwnProperty(i)) {
-                        couchCover[i] = params[i];
-                    }
-                }
-            },
+        'init': function (params) {
+            var i;
             
-            'xhr': function (params, data, callback) {
-                // Set XHR object
-                var xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-                
-                // No XHR support
-                if (!xhr) { return false; }
-            
-                // Add host to request URL
-                params.url = couchCover.host + '/' + params.url;
-                
-                //Default to GET if no method is specified
-                if (!params.method) { params.method = 'GET'; }
-                
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) { // Loaded
-                        if (xhr.status === 200) {
-                        
-                            if (callback) {
-                                callback(xhr);
-                            } else {
-                                return xhr;
-                            }
-                            
-                        }
-                    } else { // The world has ended!
-                        return false;
-                    }
-                };
-                
-                xhr.open(params.method, params.url, true);
-                
-                // PUT and POST Headers
-                if (params.method === 'PUT' || params.method === 'POST') {
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                }
-                
-                // Send with data, if available, otherwise null
-                if (data !== '') {
-                    xhr.send(data);
-                } else {
-                    xhr.send(null);
+            for (i in params) {
+                // Do not overwrite core couchCover methods/values!
+                if (!couchCover.hasOwnProperty(i)) {
+                    couchCover[i] = params[i];
                 }
             }
+        },
+        
+        'xhr': function (params, data, callback) {
+            // Set XHR object
+            var xhr = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
             
-        };
+            // No XHR support
+            if (!xhr) { return false; }
+        
+            // Add host to request URL
+            params.url = couchCover.host + '/' + params.url;
+            
+            //Default to GET if no method is specified
+            if (typeof params.method == 'undefined') { params.method = 'GET'; }
+            
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) { // Loaded
+                    if (xhr.status === 200) {
+                    
+                        if (callback) {
+                            callback(xhr);
+                        } else {
+                            return xhr;
+                        }
+                        
+                    }
+                }
+            };
+            
+            xhr.open(params.method, params.url, true);
+            
+            // PUT and POST Headers
+            if (params.method === 'PUT' || params.method === 'POST') {
+                xhr.setRequestHeader('Content-Type', 'application/json');
+            }
+            
+            // Send with data, if available, otherwise null
+            if (data !== '') {
+                xhr.send(data);
+            } else {
+                xhr.send(null);
+            }
+        }
+        
+    };
             
     couchCover.database = {
         'create': function (params, callback) {
@@ -188,14 +182,6 @@
                 if (callback) { callback(response.getResponseHeader('Etag').replace(/"/gi, '')); }
             });
         }
-    };
-    
-    couchCover.login = function () {
-        
-    };
-    
-    couchCover.logout = function () {
-    
     };
     
     window.couchCover = window.cc$ = couchCover;
